@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 THIS_BASENAME=$(basename "$0")
-TMUX_SESSION_NAME="tmux-cssh"
+TMUX_SESSION_NAME="LinuxVM"
+TMUX_WINDOW_NAME="cssh"
 HOSTS=""
 USER=""
 IDENTITY=""
@@ -228,9 +229,9 @@ if tmux ls 2> /dev/null | grep -q "${TMUX_SESSION_NAME}"; then
 	# Setup synchronizing panes
 	synchronizePanes ${SYNCHRONIZE_PANES} ${TMUX_SESSION_NAME}
 
-	# Attach to available tmux-session
-	tmux attach -t "${TMUX_SESSION_NAME}"
-	exit
+	 #Attach to available tmux-session
+	 #tmux attach -t "${TMUX_SESSION_NAME}"
+	 #exit
 fi
 
 # Hosts available ?
@@ -292,7 +293,8 @@ for host in ${HOSTS}; do
 
 	# First Call, inits the tmux-session
 	if [ "${initTmuxCall}" = "true" ]; then
-		tmux new-session -d -s "${TMUX_SESSION_NAME}" "${connectString}"
+		#tmux new-session -d -s "${TMUX_SESSION_NAME}" "${connectString}"
+        tmux new-window -n "${TMUX_WINDOW_NAME}" "${connectString}"
 
     # If our initial ssh connection has failed, do not mark initTmuxCall as false since tmux will have aborted.
     # We'll need to try to start a new tmux session for the next host.
@@ -315,4 +317,4 @@ fi
 synchronizePanes ${SYNCHRONIZE_PANES} ${TMUX_SESSION_NAME}
 
 # Attach to tmux session
-tmux attach-session -t "${TMUX_SESSION_NAME}"
+#tmux attach-session -t "${TMUX_SESSION_NAME}"
